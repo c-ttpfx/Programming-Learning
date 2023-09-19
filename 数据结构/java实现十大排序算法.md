@@ -417,6 +417,60 @@ public class CountingSort {
 }
 ```
 
+# 验证
+
+上面排序算法可以使用下面代码进行验证
+
+```java
+public class SortTest {
+    public static void test(Class aclass, Method method, String name) {
+        int count = 1000;
+        while (count-- > 0) {
+            int[] nums1 = new int[1000];
+            for (int i = 0; i < nums1.length; i++) {
+                nums1[i] = (int) (Math.random() * 10000);
+            }
+            int[] nums2 = Arrays.copyOf(nums1, nums1.length);
+            Arrays.sort(nums1);
+            try {
+                method.invoke(aclass, nums2);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+            boolean flag = Arrays.equals(nums1, nums2);
+            if (!flag) {
+                System.out.println("=========================================");
+                System.out.println(name + "排序错误");
+                System.out.println(Arrays.toString(nums1));
+                System.out.println(Arrays.toString(nums2));
+                System.out.println("=========================================");
+                return;
+            }
+        }
+        System.out.println(name + "OK");
+    }
+
+    public static void main(String[] args) throws NoSuchMethodException {
+        test(QuickSort.class, QuickSort.class.getMethod("sort", int[].class), "快速排序");
+        test(SelectionSort.class, SelectionSort.class.getMethod("sort", int[].class), "选择排序");
+        test(BubbleSort.class, BubbleSort.class.getMethod("sort", int[].class), "冒泡排序");
+        test(InsertionSort.class, InsertionSort.class.getMethod("sort", int[].class), "插入排序");
+        test(MergeSort.class, MergeSort.class.getMethod("sort", int[].class), "归并排序");
+        test(ShellSort.class, ShellSort.class.getMethod("sort", int[].class), "希尔排序");
+        test(HeapSort.class, HeapSort.class.getMethod("sort", int[].class), "堆排序");
+        test(BucketSort.class, BucketSort.class.getMethod("sort", int[].class), "桶排序");
+        test(CountingSort.class, CountingSort.class.getMethod("sort", int[].class), "计数排序");
+        test(RadixSort.class, RadixSort.class.getMethod("sort", int[].class), "基数排序");
+    }
+}
+```
+
+上面代码会随机生成1000个[0,9999]的数，然后进行排序，重复1000次来验证代码的正确性，上面代码输入如下
+
+
+
+![image-20230919204330808](https://raw.githubusercontent.com/c-ttpfx/markdown-image/main/typora-img/image-20230919204330808.png)
+
 # 各个排序的时间复杂度和空间复杂度
 
 以下是十大常见排序算法的平均时间复杂度、最坏时间复杂度、最好时间复杂度、空间复杂度以及是否稳定的表格展示：
